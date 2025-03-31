@@ -19,12 +19,18 @@
       state: started
       enabled: yes
 
+  tasks:
+  - name: Install pip
+    package:
+      name: python3-pip
+      state: present
+
   - name: install python mysql dependencies
     ansible.builtin.pip:
       name:
       - PyMySQL
       - cryptography
-      executable: pip3.9 # pip3.11 if python version is 3.11
+      executable: pip3 # pip3.11 if python version is 3.11
 
   # check password is already setup or not
   - name: check DB connection
