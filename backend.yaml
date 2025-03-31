@@ -5,11 +5,14 @@
     login_host: 10.1.0.5
     login_password: ExpenseApp@1
   tasks:
-  - name: disable default nodejs
-    ansible.builtin.command: apt module disable nodejs -y
+  - name: Remove default Node.js
+    ansible.builtin.apt:
+      name: nodejs
+      state: absent
 
-  - name: enable nodejs:20
-    ansible.builtin.command: apt module enable nodejs:20 -y
+  - name: Install Node.js 20
+    ansible.builtin.apt:
+      deb: https://deb.nodesource.com/node_20.x/pool/main/n/nodejs/nodejs_20.10.0-1nodesource1_amd64.deb
 
   - name: install nodejs
     ansible.builtin.apt: # only works for Redhat family
