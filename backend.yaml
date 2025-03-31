@@ -2,17 +2,17 @@
   become: yes
   hosts: backend
   vars:
-    login_host: db.daws78s.online
+    login_host: 10.1.0.5
     login_password: ExpenseApp@1
   tasks:
   - name: disable default nodejs
-    ansible.builtin.command: dnf module disable nodejs -y
+    ansible.builtin.command: apt module disable nodejs -y
 
   - name: enable nodejs:20
-    ansible.builtin.command: dnf module enable nodejs:20 -y
+    ansible.builtin.command: apt module enable nodejs:20 -y
 
   - name: install nodejs
-    ansible.builtin.dnf: # only works for Redhat family
+    ansible.builtin.apt: # only works for Redhat family
       name: "{{ item }}"
       state: installed
     loop:
@@ -50,11 +50,18 @@
       dest: /etc/systemd/system/backend.service
 
   - name: install python mysql dependencies
+    ansible.builtin.pip:
+      name:
+      - PyMySQL
+      - cryptography
+      executable: pip3
+
+  - name: install python mysql dependencies
     ansible.builtin.pip: 
       name:
       - PyMySQL # to connect MySQL DB from Ansible
       - cryptography
-      executable: pip3.9 # pip3.11 if python version is 3.11
+      executable: pip3 # pip3.11 if python version is 3.11
 
   - name: import data into mysql
     community.mysql.mysql_db:
